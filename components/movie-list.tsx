@@ -13,12 +13,9 @@ const MovieList: React.FC<Props> = ({ bookmarkList = false }: Props) => {
   // const { movies } = useFetchMovies();
   const { movies, bookmarkedMovies } = useContext(MovieContext);
 
-  console.log("hey?");
-  console.log(movies, "movies");
-  console.log(bookmarkedMovies, "bookmarked");
-  // if (!movies) {
-  //   return <h1>No Movies Displayed!</h1>;
-  // }
+  if (!movies) {
+    return <h1>No Movies Displayed!</h1>;
+  }
 
   return (
     <Grid templateColumns="repeat(3, 1fr)" gap={6}>

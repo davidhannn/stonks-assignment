@@ -22,13 +22,24 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
   const [bookmarkedMovies, setBookmarkedMovies] = useState<[]>([]);
 
   useEffect(() => {
-    const storedArray = localStorage.getItem("bookmarkedMovies");
+    if (typeof window !== undefined) {
+      const storedArray = localStorage.getItem("bookmarkedMovies");
 
-    if (storedArray) {
-      const parsedArray = JSON.parse(storedArray);
-      setBookmarkedMovies([...parsedArray]);
+      if (storedArray) {
+        const parsedArray = JSON.parse(storedArray);
+        setBookmarkedMovies([...parsedArray]);
+      }
     }
   }, []);
+
+  useEffect(() => {
+    if (bookmarkedMovies.length !== 0) {
+      localStorage.setItem(
+        "bookmarkedMovies",
+        JSON.stringify(bookmarkedMovies)
+      );
+    }
+  }, [bookmarkedMovies]);
 
   const options = {
     method: "GET",
@@ -47,7 +58,6 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
 
   const fetchMovies: () => Promise<void> = async () => {
     axios.request(options).then((response) => {
-      console.log(response.data.Search, "here");
       setMovies(response.data.Search);
     });
   };
@@ -56,18 +66,11 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSearch(e.target.value);
-    onSearchDebounced();
+    // onSearchDebounced();
   };
 
   const handleBookmark = (movie: MovieType) => {
     setBookmarkedMovies([...bookmarkedMovies, movie]);
-    localStorage.setItem("bookmarkedMovies", JSON.stringify(bookmarkedMovies));
-    // if (!localStorage.getItem("bookmarkedMovies")) {
-    //   localStorage.setItem("bookmarkedMovies", JSON.stringify(bookmarkedMovies))
-    // } else {
-    //   const storedArray = localStorage.setItem("bookmarkedMovies")
-    //   const parsedArray = JSON.parse(storedArray)
-    // }
   };
 
   const onSearchDebounced = useDebounce({
