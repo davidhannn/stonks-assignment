@@ -12,6 +12,7 @@ import { PropsWithChildren, useContext } from "react";
 import MovieTabs from "@/components/movie-tabs";
 import useDebounce from "@/hooks/useDebounce";
 import { set } from "lodash";
+import AlertNotice from "@/components/alert";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,8 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
   const [bookmarkedMovies, setBookmarkedMovies] = useState<MovieType[]>([]);
   const [watchedMovies, setWatchedMovies] = useState<MovieType[]>([]);
   const [search, setSearch] = useState<string>("");
+  const [alert, setAlert] = useState<boolean>(false);
+  let setAlertTimeout: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -55,6 +58,12 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
     }
   }, [watchedMovies]);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(setAlertTimeout);
+    };
+  }, []);
+
   const options = {
     method: "GET",
     url: API_URL,
@@ -84,7 +93,16 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
   };
 
   const handleBookmark = (movie: MovieType) => {
-    setBookmarkedMovies([...bookmarkedMovies, movie]);
+    const isMovieBookmarked = bookmarkedMovies.find(
+      ({ imdbID }) => imdbID === movie.imdbID
+    );
+
+    if (!!isMovieBookmarked) {
+      setAlert(true);
+      setAlertTimeout = setTimeout(() => setAlert(false), 5000);
+    } else {
+      setBookmarkedMovies([...bookmarkedMovies, movie]);
+    }
   };
 
   const handleWatched = (movie: MovieType) => {
@@ -121,6 +139,7 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
         movies,
         bookmarkedMovies,
         watchedMovies,
+        alert,
         fetchMovies,
         handleSearch,
         handleBookmark,
@@ -137,6 +156,7 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
 export default function Home() {
   return (
     <MovieContextProvider>
+      <AlertNotice />
       <main className={`${styles.main} ${inter.className}`}>
         <SearchBar />
         <MovieTabs />
