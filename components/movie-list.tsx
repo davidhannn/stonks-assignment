@@ -5,7 +5,6 @@ import MovieCard from "./movie-card";
 import { useContext } from "react";
 import { STATUS } from "@/constants";
 import { MovieType } from "@/types";
-import { watch } from "fs";
 
 type Props = {
   status?: "none" | "bookmarked" | "watched";

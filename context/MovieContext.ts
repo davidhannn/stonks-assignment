@@ -1,20 +1,35 @@
-import React, { createContext, useContext, SetStateAction } from "react";
+import React, {
+  createContext,
+  useContext,
+  SetStateAction,
+  ChangeEvent,
+} from "react";
 import { MovieType } from "@/types";
 
 type MovieContextTypes = {
   movies: MovieType[] | null;
   bookmarkedMovies: MovieType[] | null;
+  watchedMovies: MovieType[] | null;
+  search: string;
   fetchMovies: () => void;
-  handleSearch: () => void;
+  handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   handleBoomark: (value: SetStateAction<[MovieType]>) => void;
+  handleWatched: (value: SetStateAction<[MovieType]>) => void;
+  removeBookmark: (imdbID: string) => void;
+  removeWatched: (imdbID: string) => void;
 };
 
 const initialState = {
-  movies: null,
-  bookmarkedMovies: null,
-  fetchMovies: () => null,
-  handleSearch: () => null,
-  handleBookmark: () => null,
+  movies: [],
+  bookmarkedMovies: [],
+  watchedMovies: [],
+  search: "",
+  fetchMovies: () => {},
+  handleSearch: () => {},
+  handleBookmark: () => {},
+  handleWatched: () => {},
+  removeBookmark: () => {},
+  removeWatched: () => {},
 };
 
-export const MovieContext = createContext(null);
+export const MovieContext = createContext<MovieContextTypes>(initialState);
