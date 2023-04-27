@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import SearchBar from "@/components/search-bar";
@@ -20,6 +20,15 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
   const [movies, setMovies] = useState<MovieType[]>([]);
   const [search, setSearch] = useState<string>("");
   const [bookmarkedMovies, setBookmarkedMovies] = useState<[]>([]);
+
+  useEffect(() => {
+    const storedArray = localStorage.getItem("bookmarkedMovies");
+
+    if (storedArray) {
+      const parsedArray = JSON.parse(storedArray);
+      setBookmarkedMovies([...parsedArray]);
+    }
+  }, []);
 
   const options = {
     method: "GET",
@@ -47,19 +56,34 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSearch(e.target.value);
-    // onSearchDebounced(e.target.value);
+    onSearchDebounced();
   };
 
-  // const onSearchDebounced = useDebounce({
-  //   func: async (value) => {
-  //     await fetchMovies();
-  //   },
-  //   wait: 1000,
-  // });
+  const handleBookmark = (movie: MovieType) => {
+    setBookmarkedMovies([...bookmarkedMovies, movie]);
+    localStorage.setItem("bookmarkedMovies", JSON.stringify(bookmarkedMovies));
+    // if (!localStorage.getItem("bookmarkedMovies")) {
+    //   localStorage.setItem("bookmarkedMovies", JSON.stringify(bookmarkedMovies))
+    // } else {
+    //   const storedArray = localStorage.setItem("bookmarkedMovies")
+    //   const parsedArray = JSON.parse(storedArray)
+    // }
+  };
+
+  const onSearchDebounced = useDebounce({
+    func: fetchMovies,
+    wait: 1000,
+  });
 
   return (
     <MovieContext.Provider
-      value={{ movies, bookmarkedMovies, fetchMovies, handleSearch }}
+      value={{
+        movies,
+        bookmarkedMovies,
+        fetchMovies,
+        handleSearch,
+        handleBookmark,
+      }}
     >
       {children}
     </MovieContext.Provider>

@@ -1,11 +1,12 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, SetStateAction } from "react";
 import { MovieType } from "@/types";
 
 type MovieContextTypes = {
   movies: MovieType[] | null;
-  bookmarkedMovies: [] | null;
+  bookmarkedMovies: MovieType[] | null;
   fetchMovies: () => void;
   handleSearch: () => void;
+  handleBoomark: (value: SetStateAction<[MovieType]>) => void;
 };
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
   bookmarkedMovies: null,
   fetchMovies: () => null,
   handleSearch: () => null,
+  handleBookmark: () => null,
 };
 
 export const MovieContext = createContext(null);

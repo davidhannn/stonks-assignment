@@ -1,3 +1,4 @@
+import { MovieContext } from "@/context/MovieContext";
 import { MovieType } from "@/types";
 import {
   Card,
@@ -11,6 +12,7 @@ import {
   ButtonGroup,
   Button,
 } from "@chakra-ui/react";
+import { useContext } from "react";
 
 const MovieCard: React.FC<MovieType> = ({
   Title,
@@ -19,11 +21,15 @@ const MovieCard: React.FC<MovieType> = ({
   Type,
   Poster,
 }: MovieType) => {
+  const { handleBookmark } = useContext(MovieContext);
   return (
     <Card maxW="sm" maxH="sm">
       <CardBody>
         <Image
           src={Poster}
+          objectFit="contain"
+          maxH="100px"
+          maxW="sm"
           alt="Green double couch with wooden legs"
           borderRadius="lg"
         />
@@ -38,12 +44,18 @@ const MovieCard: React.FC<MovieType> = ({
       <Divider />
       <CardFooter>
         <ButtonGroup spacing="2">
-          <Button variant="solid" colorScheme="blue">
+          <Button
+            variant="solid"
+            colorScheme="blue"
+            onClick={() =>
+              handleBookmark({ Title, Year, imdbID, Type, Poster })
+            }
+          >
             Bookmark
           </Button>
-          <Button variant="ghost" colorScheme="blue">
+          {/* <Button variant="ghost" colorScheme="blue">
             Watched
-          </Button>
+          </Button> */}
         </ButtonGroup>
       </CardFooter>
     </Card>

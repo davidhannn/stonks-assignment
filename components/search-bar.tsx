@@ -14,6 +14,7 @@ const SearchBar = () => {
         value={search}
         onChange={handleSearch}
         placeholder="Search Movies..."
+        aria-label="searchmovies"
         size="md"
         mr="4"
       />

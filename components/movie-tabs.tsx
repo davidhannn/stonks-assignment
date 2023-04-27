@@ -8,6 +8,7 @@ const MovieTabs: React.FC = () => {
       <TabList>
         <Tab>Search</Tab>
         <Tab>Bookmarks</Tab>
+        <Tab>Watched</Tab>
       </TabList>
 
       <TabPanels>
@@ -15,7 +16,10 @@ const MovieTabs: React.FC = () => {
           <MovieList />
         </TabPanel>
         <TabPanel>
-          <p>Bookmarks!</p>
+          <MovieList bookmarkList={true} />
+        </TabPanel>
+        <TabPanel>
+          <MovieList bookmarkList={true} />
         </TabPanel>
       </TabPanels>
     </Tabs>
