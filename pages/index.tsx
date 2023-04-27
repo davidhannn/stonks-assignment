@@ -4,11 +4,13 @@ import { useState } from "react";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import SearchBar from "@/components/search-bar";
-import MovieList from "@/components/movie-list";
+
 import { MovieType } from "@/types";
 import axios from "axios";
 import { MovieContext } from "@/context/MovieContext";
 import { PropsWithChildren, useContext } from "react";
+import MovieTabs from "@/components/movie-tabs";
+import useDebounce from "@/hooks/useDebounce";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,7 +47,15 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSearch(e.target.value);
+    // onSearchDebounced(e.target.value);
   };
+
+  // const onSearchDebounced = useDebounce({
+  //   func: async (value) => {
+  //     await fetchMovies();
+  //   },
+  //   wait: 1000,
+  // });
 
   return (
     <MovieContext.Provider
@@ -61,7 +71,7 @@ export default function Home() {
     <MovieContextProvider>
       <main className={`${styles.main} ${inter.className}`}>
         <SearchBar />
-        <MovieList />
+        <MovieTabs />
       </main>
     </MovieContextProvider>
   );

@@ -20,7 +20,7 @@ const MovieCard: React.FC<MovieType> = ({
   Poster,
 }: MovieType) => {
   return (
-    <Card maxW="sm">
+    <Card maxW="sm" maxH="sm">
       <CardBody>
         <Image
           src={Poster}
