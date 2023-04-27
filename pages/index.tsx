@@ -80,7 +80,7 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSearch(e.target.value);
-    // onSearchDebounced();
+    onSearchDebounced();
   };
 
   const handleBookmark = (movie: MovieType) => {
@@ -112,6 +112,7 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
   const onSearchDebounced = useDebounce({
     func: fetchMovies,
     wait: 1000,
+    dependency: [search],
   });
 
   return (
