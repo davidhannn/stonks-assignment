@@ -23,7 +23,7 @@ const MovieCard: React.FC<MovieType> = ({
   Poster,
   status = STATUS.NONE,
 }: MovieType) => {
-  const { handleBookmark, handleWatched, removeBookmark } =
+  const { handleBookmark, handleWatched, removeBookmark, removeWatched } =
     useContext(MovieContext);
   return (
     <Card maxW="sm" maxH="sm">
@@ -55,6 +55,8 @@ const MovieCard: React.FC<MovieType> = ({
                 handleBookmark({ Title, Year, imdbID, Type, Poster });
               } else if (status === STATUS.BOOKMARKED) {
                 removeBookmark(imdbID);
+              } else {
+                removeWatched(imdbID);
               }
             }}
           >

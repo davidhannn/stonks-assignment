@@ -102,6 +102,13 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
     setBookmarkedMovies(filteredMovies);
   };
 
+  const removeWatched = (imdbID: string) => {
+    const filteredMovies = watchedMovies.filter(
+      (movie) => movie.imdbID !== imdbID
+    );
+    setWatchedMovies(filteredMovies);
+  };
+
   const onSearchDebounced = useDebounce({
     func: fetchMovies,
     wait: 1000,
@@ -118,6 +125,7 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
         handleBookmark,
         handleWatched,
         removeBookmark,
+        removeWatched,
       }}
     >
       {children}
