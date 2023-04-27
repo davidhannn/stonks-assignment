@@ -1,6 +1,7 @@
 import { Tabs, Tab, TabList, TabPanel, TabPanels } from "@chakra-ui/react";
 import { useContext } from "react";
 import MovieList from "./movie-list";
+import { STATUS } from "@/constants";
 
 const MovieTabs: React.FC = () => {
   return (
@@ -13,13 +14,13 @@ const MovieTabs: React.FC = () => {
 
       <TabPanels>
         <TabPanel>
-          <MovieList />
+          <MovieList status={STATUS.NONE} />
         </TabPanel>
         <TabPanel>
-          <MovieList bookmarkList={true} />
+          <MovieList status={STATUS.BOOKMARKED} />
         </TabPanel>
         <TabPanel>
-          <MovieList bookmarkList={true} />
+          <MovieList status={STATUS.WATCHED} />
         </TabPanel>
       </TabPanels>
     </Tabs>

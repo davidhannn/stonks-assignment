@@ -3,15 +3,17 @@ import { Grid, GridItem } from "@chakra-ui/react";
 import { MovieContext } from "@/context/MovieContext";
 import MovieCard from "./movie-card";
 import { useContext } from "react";
+import { STATUS } from "@/constants";
 import { MovieType } from "@/types";
+import { watch } from "fs";
 
 type Props = {
-  bookmarkList?: boolean;
+  status?: "none" | "bookmarked" | "watched";
 };
 
-const MovieList: React.FC<Props> = ({ bookmarkList = false }: Props) => {
+const MovieList: React.FC<Props> = ({ status = STATUS.NONE }: Props) => {
   // const { movies } = useFetchMovies();
-  const { movies, bookmarkedMovies } = useContext(MovieContext);
+  const { movies, bookmarkedMovies, watchedMovies } = useContext(MovieContext);
 
   if (!movies) {
     return <h1>No Movies Displayed!</h1>;
@@ -19,7 +21,19 @@ const MovieList: React.FC<Props> = ({ bookmarkList = false }: Props) => {
 
   return (
     <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-      {bookmarkList
+      {status === STATUS.NONE
+        ? movies?.map(({ Title, Year, imdbID, Type, Poster }: MovieType) => (
+            <MovieCard
+              key={imdbID}
+              Title={Title}
+              Year={Year}
+              imdbID={imdbID}
+              Type={Type}
+              Poster={Poster}
+              status={STATUS.NONE}
+            />
+          ))
+        : status === STATUS.BOOKMARKED
         ? bookmarkedMovies?.map(
             ({ Title, Year, imdbID, Type, Poster }: MovieType) => (
               <MovieCard
@@ -29,21 +43,23 @@ const MovieList: React.FC<Props> = ({ bookmarkList = false }: Props) => {
                 imdbID={imdbID}
                 Type={Type}
                 Poster={Poster}
+                status={STATUS.BOOKMARKED}
               />
             )
           )
-        : movies?.map(({ Title, Year, imdbID, Type, Poster }: MovieType) => (
-            // <GridItem w="100%" h="100%" bg="blue.500">
-            <MovieCard
-              key={imdbID}
-              Title={Title}
-              Year={Year}
-              imdbID={imdbID}
-              Type={Type}
-              Poster={Poster}
-            />
-            // </GridItem>
-          ))}
+        : watchedMovies.map(
+            ({ Title, Year, imdbID, Type, Poster }: MovieType) => (
+              <MovieCard
+                key={imdbID}
+                Title={Title}
+                Year={Year}
+                imdbID={imdbID}
+                Type={Type}
+                Poster={Poster}
+                status={STATUS.WATCHED}
+              />
+            )
+          )}
     </Grid>
   );
 };

@@ -4,4 +4,5 @@ export type MovieType = {
   Type: string;
   Year: string;
   imdbID: string;
+  status?: "none" | "bookmarked" | "watched";
 };

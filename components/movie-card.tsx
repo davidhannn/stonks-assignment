@@ -1,3 +1,4 @@
+import { STATUS } from "@/constants";
 import { MovieContext } from "@/context/MovieContext";
 import { MovieType } from "@/types";
 import {
@@ -20,8 +21,9 @@ const MovieCard: React.FC<MovieType> = ({
   imdbID,
   Type,
   Poster,
+  status = STATUS.NONE,
 }: MovieType) => {
-  const { handleBookmark } = useContext(MovieContext);
+  const { handleBookmark, handleWatched } = useContext(MovieContext);
   return (
     <Card maxW="sm" maxH="sm">
       <CardBody>
@@ -51,11 +53,19 @@ const MovieCard: React.FC<MovieType> = ({
               handleBookmark({ Title, Year, imdbID, Type, Poster })
             }
           >
-            Bookmark
+            {status === STATUS.NONE ? "Bookmark" : "Remove"}
           </Button>
-          {/* <Button variant="ghost" colorScheme="blue">
-            Watched
-          </Button> */}
+          {status === STATUS.BOOKMARKED && (
+            <Button
+              variant="ghost"
+              colorScheme="blue"
+              onClick={() =>
+                handleWatched({ Title, Year, imdbID, Type, Poster })
+              }
+            >
+              Watched
+            </Button>
+          )}
         </ButtonGroup>
       </CardFooter>
     </Card>

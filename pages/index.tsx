@@ -18,8 +18,9 @@ const API_URL: string = "https://movie-database-alternative.p.rapidapi.com/";
 
 const MovieContextProvider = ({ children }: PropsWithChildren) => {
   const [movies, setMovies] = useState<MovieType[]>([]);
+  const [bookmarkedMovies, setBookmarkedMovies] = useState<MovieType[]>([]);
+  const [watchedMovies, setWatchedMovies] = useState<MovieType[]>([]);
   const [search, setSearch] = useState<string>("");
-  const [bookmarkedMovies, setBookmarkedMovies] = useState<[]>([]);
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -73,6 +74,10 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
     setBookmarkedMovies([...bookmarkedMovies, movie]);
   };
 
+  const handleWatched = (movie: MovieType) => {
+    setWatchedMovies([...watchedMovies, movie]);
+  };
+
   const onSearchDebounced = useDebounce({
     func: fetchMovies,
     wait: 1000,
@@ -83,9 +88,11 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
       value={{
         movies,
         bookmarkedMovies,
+        watchedMovies,
         fetchMovies,
         handleSearch,
         handleBookmark,
+        handleWatched,
       }}
     >
       {children}
