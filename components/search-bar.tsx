@@ -4,17 +4,15 @@ import { useFetchMovies } from "@/hooks/useFetchMovies";
 
 const SearchBar = () => {
   const [value, setValue] = useState("");
-  const { movies, fetchMovies } = useFetchMovies();
-  const handleChange = (event) => setValue(event.target.value);
+  const { movies, search, fetchMovies, handleSearch } = useFetchMovies();
+  // const handleChange = (event) => setValue(event.target.value);
 
-  // useFetchMovies();
-  console.log(movies, "movies");
   return (
     <>
-      <Text mb="8px">Value: {value}</Text>
+      <Text mb="8px">Value: {search}</Text>
       <Input
-        value={value}
-        onChange={handleChange}
+        value={search}
+        onChange={handleSearch}
         placeholder="Here is a sample placeholder"
         size="sm"
       />

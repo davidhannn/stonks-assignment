@@ -1,13 +1,18 @@
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
+import { MovieType } from "@/types";
+
+const API_URL: string = "https://movie-database-alternative.p.rapidapi.com/";
 
 export const useFetchMovies = () => {
-  const [movie, setMovie] = useState();
+  const [movies, setMovies] = useState<MovieType[]>([]);
+  const [search, setSearch] = useState("");
+
   const options = {
     method: "GET",
-    url: "https://movie-database-alternative.p.rapidapi.com/",
+    url: API_URL,
     params: {
-      s: "Avengers Endgame",
+      s: search,
       r: "json",
       page: "1",
     },
@@ -18,20 +23,23 @@ export const useFetchMovies = () => {
     },
   };
 
-  const fetchMovies = async () => {
+  const fetchMovies: () => Promise<void> = async () => {
     axios.request(options).then((response) => {
-      console.log(response.data);
-      setMovie(response.data);
+      console.log(response.data.Search, "here");
+      setMovies(response.data.Search);
     });
-    console.log("does it come here");
-    // const response = await axios.request(options);
+  };
 
-    // console.log(response.data, "response");
-    // return response;
+  const handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearch(e.target.value);
   };
 
   return {
-    movie,
+    movies,
+    search,
     fetchMovies,
+    handleSearch,
   };
 };
