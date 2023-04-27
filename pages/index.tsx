@@ -11,6 +11,7 @@ import { MovieContext } from "@/context/MovieContext";
 import { PropsWithChildren, useContext } from "react";
 import MovieTabs from "@/components/movie-tabs";
 import useDebounce from "@/hooks/useDebounce";
+import { set } from "lodash";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,11 +25,17 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (typeof window !== undefined) {
-      const storedArray = localStorage.getItem("bookmarkedMovies");
+      const storedBookmarks = localStorage.getItem("bookmarkedMovies");
+      const storedWatched = localStorage.getItem("watchedMovies");
 
-      if (storedArray) {
-        const parsedArray = JSON.parse(storedArray);
+      if (storedBookmarks) {
+        const parsedArray = JSON.parse(storedBookmarks);
         setBookmarkedMovies([...parsedArray]);
+      }
+
+      if (storedWatched) {
+        const parsedArray = JSON.parse(storedWatched);
+        setWatchedMovies([...parsedArray]);
       }
     }
   }, []);
@@ -41,6 +48,12 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
       );
     }
   }, [bookmarkedMovies]);
+
+  useEffect(() => {
+    if (watchedMovies.length !== 0) {
+      localStorage.setItem("watchedMovies", JSON.stringify(watchedMovies));
+    }
+  }, [watchedMovies]);
 
   const options = {
     method: "GET",
@@ -75,7 +88,18 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
   };
 
   const handleWatched = (movie: MovieType) => {
+    const filteredWatched = bookmarkedMovies.filter(
+      ({ imdbID }) => imdbID !== movie.imdbID
+    );
+    setBookmarkedMovies(filteredWatched);
     setWatchedMovies([...watchedMovies, movie]);
+  };
+
+  const removeBookmark = (imdbID: string) => {
+    const filteredMovies = bookmarkedMovies.filter(
+      (movie) => movie.imdbID !== imdbID
+    );
+    setBookmarkedMovies(filteredMovies);
   };
 
   const onSearchDebounced = useDebounce({
@@ -93,6 +117,7 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
         handleSearch,
         handleBookmark,
         handleWatched,
+        removeBookmark,
       }}
     >
       {children}

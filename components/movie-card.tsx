@@ -23,7 +23,8 @@ const MovieCard: React.FC<MovieType> = ({
   Poster,
   status = STATUS.NONE,
 }: MovieType) => {
-  const { handleBookmark, handleWatched } = useContext(MovieContext);
+  const { handleBookmark, handleWatched, removeBookmark } =
+    useContext(MovieContext);
   return (
     <Card maxW="sm" maxH="sm">
       <CardBody>
@@ -32,7 +33,7 @@ const MovieCard: React.FC<MovieType> = ({
           objectFit="contain"
           maxH="100px"
           maxW="sm"
-          alt="Green double couch with wooden legs"
+          alt={Title}
           borderRadius="lg"
         />
         <Stack mt="6" spacing="3">
@@ -49,9 +50,13 @@ const MovieCard: React.FC<MovieType> = ({
           <Button
             variant="solid"
             colorScheme="blue"
-            onClick={() =>
-              handleBookmark({ Title, Year, imdbID, Type, Poster })
-            }
+            onClick={() => {
+              if (status === STATUS.NONE) {
+                handleBookmark({ Title, Year, imdbID, Type, Poster });
+              } else if (status === STATUS.BOOKMARKED) {
+                removeBookmark(imdbID);
+              }
+            }}
           >
             {status === STATUS.NONE ? "Bookmark" : "Remove"}
           </Button>
