@@ -52,7 +52,7 @@ const MovieCard: React.FC<MovieType> = ({
             colorScheme="blue"
             onClick={() => {
               if (status === STATUS.NONE) {
-                handleBookmark({ Title, Year, imdbID, Type, Poster });
+                handleBookmark({ Poster, Title, Type, Year, imdbID });
               } else if (status === STATUS.BOOKMARKED) {
                 removeBookmark(imdbID);
               } else {

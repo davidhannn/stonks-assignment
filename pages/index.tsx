@@ -140,6 +140,7 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
         bookmarkedMovies,
         watchedMovies,
         alert,
+        search,
         fetchMovies,
         handleSearch,
         handleBookmark,
