@@ -14,7 +14,7 @@ type MovieContextTypes = {
   alert: boolean;
   fetchMovies: () => void;
   handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleBoomark: (value: SetStateAction<[MovieType]>) => void;
+  handleBookmark: (value: SetStateAction<[MovieType]>) => void;
   handleWatched: (value: SetStateAction<[MovieType]>) => void;
   removeBookmark: (imdbID: string) => void;
   removeWatched: (imdbID: string) => void;
