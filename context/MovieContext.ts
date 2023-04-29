@@ -11,6 +11,7 @@ type MovieContextTypes = {
   bookmarkedMovies: MovieType[] | null;
   watchedMovies: MovieType[] | null;
   search: string;
+  alert: boolean;
   fetchMovies: () => void;
   handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   handleBoomark: (value: SetStateAction<[MovieType]>) => void;
@@ -24,6 +25,7 @@ const initialState = {
   bookmarkedMovies: [],
   watchedMovies: [],
   search: "",
+  alert: false,
   fetchMovies: () => {},
   handleSearch: () => {},
   handleBookmark: () => {},
