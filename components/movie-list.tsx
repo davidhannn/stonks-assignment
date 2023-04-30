@@ -1,17 +1,15 @@
-// import { useFetchMovies } from "@/hooks/useFetchMovies";
-import { Grid, GridItem } from "@chakra-ui/react";
-import { MovieContext } from "@/context/MovieContext";
-import MovieCard from "./movie-card";
-import { useContext } from "react";
 import { STATUS } from "@/constants";
+import { MovieContext } from "@/context/MovieContext";
 import { MovieType } from "@/types";
+import { Grid } from "@chakra-ui/react";
+import { useContext } from "react";
+import MovieCard from "./movie-card";
 
 type Props = {
   status?: "none" | "bookmarked" | "watched";
 };
 
 const MovieList: React.FC<Props> = ({ status = STATUS.NONE }: Props) => {
-  // const { movies } = useFetchMovies();
   const { movies, bookmarkedMovies, watchedMovies } = useContext(MovieContext);
 
   if (!movies) {
@@ -19,7 +17,14 @@ const MovieList: React.FC<Props> = ({ status = STATUS.NONE }: Props) => {
   }
 
   return (
-    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+    <Grid
+      gridTemplateColumns={{
+        sm: "1fr 1fr 1fr",
+        md: "1fr 1fr 1fr",
+        lg: "1fr 1fr 1fr",
+      }}
+      gap={6}
+    >
       {status === STATUS.NONE
         ? movies?.map(({ Title, Year, imdbID, Type, Poster }: MovieType) => (
             <MovieCard

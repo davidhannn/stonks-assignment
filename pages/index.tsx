@@ -89,7 +89,7 @@ const MovieContextProvider = ({ children }: PropsWithChildren) => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSearch(e.target.value);
-    onSearchDebounced();
+    // onSearchDebounced();
   };
 
   const handleBookmark = (movie: MovieType) => {
